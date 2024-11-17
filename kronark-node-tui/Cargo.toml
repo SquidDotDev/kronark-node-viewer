@@ -1,0 +1,9 @@
+[package]
+name = "kronark-node-tui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+kronark-node-parser = { path = "../kronark-node-parser" }
+crossterm = "0.28.1"
+ratatui = "0.29.0"
