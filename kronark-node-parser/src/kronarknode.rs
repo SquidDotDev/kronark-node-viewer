@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-mod instance;
+pub mod instance;
 mod nodes;
 mod roots;
 mod socket;

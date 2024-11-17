@@ -3,7 +3,7 @@ use crate::lexer::Lexer;
 
 use super::socket::Socket;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Instance {
 	// Assumptions: key is a unique ID, type is an index entry into the list of nodes
 	pub key: usize,

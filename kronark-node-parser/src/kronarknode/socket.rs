@@ -3,7 +3,7 @@ use itertools::Itertools;
 use crate::errors::NodeParseError;
 use crate::lexer::Lexer;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum SocketType {
 	OutgoingNamed,
 	IncomingNamed,
@@ -34,7 +34,7 @@ impl SocketType {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct SocketFlags(u8);
 impl SocketFlags {
 	pub fn from_byte(byte: u8, byte_read: u64) -> Result<SocketFlags, NodeParseError> {
@@ -65,13 +65,13 @@ impl SocketFlags {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum DataType {
 	Connection(u8, u8), // Node, Socket
 	Constant(String),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Socket {
 	pub flags: SocketFlags,
 	pub type_index: usize,

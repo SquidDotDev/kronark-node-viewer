@@ -12,8 +12,8 @@ pub enum DataTypeTui {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct DataTui {
-    data_type: DataTypeTui,
-    connection: Option<Connection>
+    pub data_type: DataTypeTui,
+    pub connection: Option<Connection>
 }
 
 impl DataTui {
@@ -45,15 +45,15 @@ impl SocketTuiType {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Connection {
-    node: u8,
-    port_index: u8
+    pub node: u8,
+    pub port_index: u8
 } 
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct SocketTui {
-    name: String,
-    socket_type: SocketTuiType,
-    type_index: u8,
+    pub name: String,
+    pub socket_type: SocketTuiType,
+    pub type_index: u8,
 }
 
 impl SocketTui {
@@ -64,10 +64,10 @@ impl SocketTui {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct SocketTuiTransform {
-    width: usize,
-    name_width: usize,
-    value_width: usize,
-    y: i32,
-    x: i32, 
+    pub width: usize,
+    pub name_width: usize,
+    pub value_width: usize,
+    pub y: i32,
+    pub x: i32, 
 }
 

@@ -1,15 +1,16 @@
-use crate::node_tui::NodeTui;
+use crate::{node_tui::NodeTui, socket_tui::Connection};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct InternalGraph {
-    nodes: Vec<NodeTui>,
-    input: (i32, i32),
-    output: (i32, i32),
+    pub nodes: Vec<NodeTui>,
+    pub input: (i32, i32),
+    pub output: (i32, i32),
+    pub output_connections: Vec<Connection>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct NodeGraph {
-    internal: InternalGraph,
-    external: NodeTui
+    pub internal: InternalGraph,
+    pub external: NodeTui
 }
 
