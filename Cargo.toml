@@ -7,5 +7,6 @@ edition = "2021"
 members=["kronark-node-parser", "kronark-node-tui"]
 [dependencies]
 kronark-node-parser = {path = "./kronark-node-parser"}
+kronark-node-tui = {path = "./kronark-node-tui"}
 clap = {version = "4.5.20", features = ["derive"]}
 clap-stdin = { version = "0.5.1", features = ["clap"] }

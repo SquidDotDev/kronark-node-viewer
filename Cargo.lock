@@ -354,6 +354,7 @@ dependencies = [
  "clap",
  "clap-stdin",
  "kronark-node-parser",
+ "kronark-node-tui",
 ]
 
 [[package]]

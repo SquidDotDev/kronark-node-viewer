@@ -1,7 +1,7 @@
 use errors::NodeConversionError;
 use kronark_node_parser::prelude::Node;
 use node_tui::NodeTui;
-use nodegraph::NodeGraph;
+use nodegraph::{InternalGraph, NodeGraph};
 use socket_tui::Connection;
 
 mod draw_utils;
@@ -40,7 +40,7 @@ impl App {
 
         let input = (node_def.roots.input_root_x as i32, node_def.roots.input_root_y as i32);
         let output = (node_def.roots.output_root_x as i32, node_def.roots.output_root_y as i32);
-        let ouput_connections: Vec<Connection> = node_def.roots.output_connections
+        let output_connections: Vec<Connection> = node_def.roots.output_connections
         .iter()
         .map(|(node, port)| Connection { node: node.clone(), port_index: port.clone() })
         .collect();
@@ -53,8 +53,14 @@ impl App {
             };
         }
 
+        let internal = InternalGraph { nodes, input, output, output_connections };
+        let graph = NodeGraph { 
+            internal,
+            external: NodeTui { name: "".to_string(), x: 0, y: 0, sockets: vec![], color: ratatui::style::Color::DarkGray, type_index: 0 } 
+        };
+
         let camera = Camera { x: input.0, y: input.1 }; 
 
-        Err(NodeConversionError::NodeVersionNotSupported)
+        Ok(App { camera, node_graph: graph, graph_view: GraphView::Internal })
     }
 }
