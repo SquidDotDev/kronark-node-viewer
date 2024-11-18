@@ -1,5 +1,7 @@
 use std::ops::RangeInclusive;
 
+use kronark_node_parser::kronarknode::socket::DataType;
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum DataTypeTui {
     Output,
@@ -48,6 +50,16 @@ pub struct Connection {
     pub node: u8,
     pub port_index: u8
 } 
+
+impl Connection {
+    pub fn from_data(data: Option<DataType>) -> Option<Self> {
+        if let Some(DataType::Connection(node, port_index)) = data {
+            Some(Connection {node, port_index})
+        } else {
+            None
+        }
+    }
+}
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct SocketTui {

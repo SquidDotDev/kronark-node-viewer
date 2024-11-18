@@ -4,7 +4,7 @@ use node_tui::NodeTui;
 use nodegraph::{InternalGraph, NodeGraph};
 use socket_tui::Connection;
 
-mod draw_utils;
+mod utils;
 mod socket_tui;
 mod node_tui;
 mod nodegraph;

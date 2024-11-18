@@ -3,7 +3,7 @@ use std::cmp::Ordering;
 pub mod instance;
 mod nodes;
 mod roots;
-mod socket;
+pub mod socket;
 mod types;
 
 use instance::Instance;
