@@ -1,4 +1,4 @@
-use std::io::Read;
+use std::io::{self, Read};
 
 use clap::Parser;
 use clap_stdin::FileOrStdin;
@@ -12,15 +12,22 @@ struct Args {
 	filepath: FileOrStdin,
 }
 
-fn main() {
+fn main() -> io::Result<()> {
 	let args = Args::parse();
 	let data = args.filepath.into_reader().expect("Failed to read std in");
 
 	let node_res = Node::from_bytes(ShortCircuitedReadIterator::new(data));
 	match node_res {
-		Ok(node) => println!("{:#?}", App::from_node(node)),
+		Ok(node) => {
+			let app = App::from_node(node);
+			println!("{:#?}", app);
+			if app.is_ok() {
+				return app.unwrap().launch();
+			}
+		},
 		Err(error) => eprintln!("{}", error),
-	}
+	};
+	Ok(())
 }
 
 struct ShortCircuitedReadIterator<R: Read> {
