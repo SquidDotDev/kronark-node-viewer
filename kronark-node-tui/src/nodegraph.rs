@@ -16,6 +16,10 @@ impl InternalGraph {
     pub fn render(&self, buf: &mut Buffer, camera: &Camera) {
         self.render_input(buf, camera);
         self.render_output(buf, camera);
+
+        for node in self.nodes.iter() {
+            node.render(buf, camera);
+        }
     }
 
     fn render_input(&self, buf: &mut Buffer, camera: &Camera) {

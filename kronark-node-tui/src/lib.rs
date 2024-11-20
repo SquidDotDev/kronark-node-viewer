@@ -75,7 +75,7 @@ impl App {
             external: NodeTui { name: "".to_string(), x: 0, y: 0, sockets: vec![], color: ratatui::style::Color::DarkGray, type_index: 0 } 
         };
 
-        let camera = Camera::with_scale(input, 1.2); 
+        let camera = Camera::with_scale(input, 2.0); 
 
         Ok(App { camera, node_graph: graph, graph_view: GraphView::Internal, exit: false })
     }
