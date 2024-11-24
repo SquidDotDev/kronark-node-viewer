@@ -9,12 +9,11 @@ pub fn validate_socket(instance: &Instance, index: usize, socket_type: SocketTyp
     if let Some(s) = instance.sockets.get(index) {
         
         if s.flags.get_type() != socket_type {
-            println!("index: {}, type: {:?}, expected:{:?}", index, s.flags.get_type(), socket_type);
-            return Err(NodeConversionError::InvalidSocket(s.clone()));
+            return Err(NodeConversionError::InvalidSocketType(format!("index: {}, type: {:?}, expected:{:?}", index, s.flags.get_type(), socket_type)));
         }
         Ok(s)
     } else {
-        return Err(NodeConversionError::InvalidSocketCount);
+        return Err(NodeConversionError::InvalidSocketCount(index));
     }
 }
 

@@ -4,6 +4,6 @@ use kronark_node_parser::kronarknode::socket::Socket;
 pub enum NodeConversionError{
     NodeVersionNotSupported,
     UnknownNodeType,
-    InvalidSocketCount,
-    InvalidSocket(Socket),
+    InvalidSocketCount(usize),
+    InvalidSocketType(String),
 }

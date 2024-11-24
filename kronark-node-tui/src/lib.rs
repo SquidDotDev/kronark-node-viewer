@@ -1,6 +1,6 @@
 use std::io;
 
-use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use errors::NodeConversionError;
 use kronark_node_parser::prelude::Node;
 use node_tui::NodeTui;
@@ -109,12 +109,18 @@ impl App {
     }
 
     fn handle_key_event(&mut self, key_event: KeyEvent) {
+        let speed: i32 = if key_event.modifiers.contains(KeyModifiers::SHIFT) {
+            5 
+        } else {
+            1 
+        };
+
         match key_event.code {
             KeyCode::Char('q') => self.exit(),
-            KeyCode::Down => self.camera.y += 1,
-            KeyCode::Up => self.camera.y -= 1,
-            KeyCode::Left => self.camera.x -= 1,
-            KeyCode::Right => self.camera.x += 1,
+            KeyCode::Down => self.camera.y += speed,
+            KeyCode::Up => self.camera.y -= speed,
+            KeyCode::Left => self.camera.x -= speed,
+            KeyCode::Right => self.camera.x += speed,
             _ => {}
         }
     }
