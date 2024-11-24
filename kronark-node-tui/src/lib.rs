@@ -6,7 +6,6 @@ use kronark_node_parser::prelude::Node;
 use node_tui::NodeTui;
 use nodegraph::{InternalGraph, NodeGraph};
 use ratatui::{buffer::Buffer, layout::Rect, widgets::Widget, DefaultTerminal, Frame};
-use socket_tui::Connection;
 
 mod utils;
 mod socket_tui;
@@ -56,10 +55,7 @@ impl App {
 
         let input = (node_def.roots.input_root_x as i32, node_def.roots.input_root_y as i32);
         let output = (node_def.roots.output_root_x as i32, node_def.roots.output_root_y as i32);
-        let output_connections: Vec<Connection> = node_def.roots.output_connections
-        .iter()
-        .map(|(node, port)| Connection { node: node.clone(), port_index: port.clone() })
-        .collect();
+        let output_connections: Vec<(u8, u8)> = node_def.roots.output_connections;
 
         let mut nodes = Vec::<NodeTui>::new();
         for instance in node_def.instances.iter() {

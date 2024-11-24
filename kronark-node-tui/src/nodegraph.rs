@@ -1,7 +1,7 @@
 use ratatui::buffer::Buffer;
 use ratatui::style::Color;
 
-use crate::{node_tui::NodeTui, socket_tui::Connection, utils::{color_rect, write_line}, Camera};
+use crate::{node_tui::NodeTui, utils::{color_rect, write_line}, Camera};
 
 
 #[derive(Debug, PartialEq, Clone)]
@@ -9,7 +9,7 @@ pub struct InternalGraph {
     pub nodes: Vec<NodeTui>,
     pub input: (i32, i32),
     pub output: (i32, i32),
-    pub output_connections: Vec<Connection>,
+    pub output_connections: Vec<(u8, u8)>,
 }
 
 impl InternalGraph {

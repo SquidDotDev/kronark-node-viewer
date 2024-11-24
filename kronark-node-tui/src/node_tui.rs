@@ -2,7 +2,7 @@ use kronark_node_parser::kronarknode::instance::Instance;
 use ratatui::buffer::Buffer;
 use ratatui::style::Color;
 
-use crate::socket_tui::{SocketTuiTransform, SocketTuiType};
+use crate::socket_tui::{SocketTuiTransform};
 use crate::utils::{color_line, color_rect, format_text_center, write_line};
 use crate::Camera;
 use crate::{errors::NodeConversionError, socket_tui::SocketTui};
@@ -60,19 +60,13 @@ impl NodeTui {
         };
 
         for socket in self.sockets.iter() {
-            socket_tranform.y += socket.render(socket_tranform.clone(), buf);
+            socket.render(socket_tranform.clone(), buf);
+            socket_tranform.y += 2;
         }
         
     }
 
     pub fn get_y_size(&self) -> usize {
-        let mut count = 4;
-        for socket in self.sockets.iter() {
-            match &socket.socket_type {
-                SocketTuiType::Repetitive(v) => count += 2 * v.len(),
-                SocketTuiType::Single(_) => count += 2,
-            }
-        }
-        count
+        self.sockets.len() as usize * 2 + 4
     }
 }

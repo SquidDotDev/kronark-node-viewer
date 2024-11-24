@@ -18,9 +18,9 @@ pub fn validate_socket(instance: &Instance, index: usize, socket_type: SocketTyp
     }
 }
 
-pub fn data_get_constant(data: Option<DataType>) -> Option<String> {
+pub fn data_get_constant(data: &Option<DataType>) -> Option<String> {
     if let Some(DataType::Constant(value)) = data {
-        Some(value)
+        Some(value.clone())
     } else {
         None
     }
