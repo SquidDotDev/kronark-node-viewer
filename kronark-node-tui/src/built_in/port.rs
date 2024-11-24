@@ -121,49 +121,50 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
 }
 
 fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), NodeConversionError> {
-    // let maximum = validate_socket(&instance, 6, SocketType::IncomingNumber)?;
-    // let maximum_connection = Connection::from_data(maximum.data.clone());
 
-    // sockets.push(SocketTui{ 
-    //     name: "maximum".to_string(),
-    //     socket_type: SocketTuiType::Single(DataTui {
-    //         data_type: DataTypeTui::Number { range: 0..=i64::MAX, value: data_get_constant(maximum.data.clone()).unwrap_or(String::new()).parse().unwrap_or(i64::MAX), default: i64::MAX },
-    //         connection: maximum_connection }),
-    //     type_index: maximum.type_index as u8,
-    // });
+    // minimum port
 
-    // let minimum = validate_socket(&instance, 7, SocketType::IncomingNumber)?;
-    // let minimum_connection = Connection::from_data(minimum.data.clone());
+    let minimum = validate_socket(&instance, 6, SocketType::IncomingText)?;
 
-    // sockets.push(SocketTui{ 
-    //     name: "minimum".to_string(),
-    //     socket_type: SocketTuiType::Single(DataTui {
-    //         data_type: DataTypeTui::Number { range: 0..=i64::MAX, value: data_get_constant(minimum.data.clone()).unwrap_or(String::new()).parse().unwrap_or(0), default: 0 },
-    //         connection: minimum_connection }),
-    //     type_index: minimum.type_index as u8,
-    // });
+    sockets.push(SocketTui{ 
+        name: "minimum".to_string(),
+        socket: minimum.clone(),
+        default: SocketDefault::String(String::new()),
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "4".to_string(), valid: "123456789".to_string() }
+    });
 
-    // let valid = validate_socket(&instance, 8, SocketType::IncomingText)?;
-    // let valid_connection = Connection::from_data(valid.data.clone());
+    // maximum port
 
-    // sockets.push(SocketTui{ 
-    //     name: "valid".to_string(),
-    //     socket_type: SocketTuiType::Single(DataTui {
-    //         data_type: DataTypeTui::Text{value: data_get_constant(valid.data.clone()).unwrap_or("".to_string()), range: 0..=i64::MAX, valid: String::new(), default: String::new()},
-    //         connection: valid_connection }),
-    //     type_index: valid.type_index as u8,
-    // });
+    let maximum = validate_socket(&instance, 7, SocketType::IncomingText)?;
 
-    // let default = validate_socket(&instance, 9, SocketType::IncomingText)?;
-    // let default_connection = Connection::from_data(default.data.clone());
+    sockets.push(SocketTui{ 
+        name: "maximum".to_string(),
+        socket: maximum.clone(),
+        default: SocketDefault::String(String::new()),
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "4".to_string(), valid: "123456789".to_string() }
+    });
 
-    // sockets.push(SocketTui{ 
-    //     name: "default".to_string(),
-    //     socket_type: SocketTuiType::Single(DataTui {
-    //         data_type: DataTypeTui::Text{value: data_get_constant(default.data.clone()).unwrap_or("".to_string()), range: 0..=i64::MAX, valid: String::new(), default: String::new()},
-    //         connection: default_connection }),
-    //     type_index: default.type_index as u8,
-    // });
+    // valid port
+
+    let valid = validate_socket(&instance, 8, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "valid".to_string(),
+        socket: valid.clone(),
+        default: SocketDefault::String(String::new()),
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "256".to_string(), valid: String::new() }
+    });
+
+    // default port
+
+    let default = validate_socket(&instance, 9, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "default".to_string(),
+        socket: default.clone(),
+        default: SocketDefault::String("".to_string()),
+        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: String::new() }
+    });
     
     Ok(())
 }
