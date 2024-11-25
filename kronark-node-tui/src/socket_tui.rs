@@ -19,7 +19,7 @@ impl Additional {
     fn get_switch_string(&self, value: bool) -> String {
         if let Additional::Switch {on, off} = self {
             if value { on.clone() } else { off.clone() }
-        } else { if value { "true".to_string() } else { "false".to_string() } }
+        } else { if value { "on".to_string() } else { "off".to_string() } }
     }
 }
 
