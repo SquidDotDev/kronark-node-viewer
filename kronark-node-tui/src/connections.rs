@@ -22,6 +22,28 @@ impl InternalGraph {
                 }
             }
         }
+
+        for (i, (node, socket)) in self.output_connections.iter().enumerate() {
+            if let Some(socket_pos) = self.get_socket_pos(camera, node.clone(), socket.clone()) {
+                let (x_output, y_output) = camera.apply(self.output);
+                let (x_end, y_end) = (x_output, y_output + i as i32 * 2 + 1);
+                render_connection(socket_pos.0, x_end, socket_pos.1, y_end, buf, camera);
+            }
+            
+
+        }
+    }
+
+    fn get_socket_pos(&self, camera: &Camera, node: u8, socket: u8) -> Option<(i32, i32)> {
+        for node_tui in self.nodes.iter().filter(|n| n.key == node) {
+            for (i, socket_tui) in node_tui.sockets.iter().enumerate() {
+                if socket_tui.socket.port_slot == socket {
+                    let (x_node, y_node) = camera.apply((node_tui.x, node_tui.y));
+                    return Some((x_node, y_node + i as i32 * 2 + 4));
+                }
+            }
+        }
+        None
     }
 }
 
