@@ -105,8 +105,11 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
     });
 
     match data_get_constant(&type_socket.data.clone()).unwrap_or("named".to_string()).as_str() {
-        "named" => (),
+        "named" => parse_default(instance.clone(), &mut sockets)?,
         "text" => parse_text(instance.clone(), &mut sockets)?,
+        "number" => parse_number(instance.clone(), &mut sockets)?,
+        "select" => parse_default(instance.clone(), &mut sockets)?,
+        "switch" => parse_switch(instance.clone(), &mut sockets)?,
         _ => ()
     };
 
@@ -120,6 +123,81 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         key: instance.key as u8,
     };
     Ok(node)
+}
+
+fn parse_default(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), NodeConversionError> {
+    // default port
+
+    let default = validate_socket(&instance, 6, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "default".to_string(),
+        socket: default.clone(),
+        default: SocketDefault::String("".to_string()),
+        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: String::new() }
+    });
+
+    // data port
+
+    let data = validate_socket(&instance, 7, SocketType::OutgoingNamed)?;
+
+    sockets.push(SocketTui{ 
+        name: "data".to_string(),
+        socket: data.clone(),
+        default: SocketDefault::None,
+        additional: Additional::None,
+    });
+    
+    Ok(())
+}
+
+fn parse_switch(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), NodeConversionError> {
+
+    // inactive port
+
+    let inactive = validate_socket(&instance, 6, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "inactive".to_string(),
+        socket: inactive.clone(),
+        default: SocketDefault::String(String::new()),
+        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "qwertyuiopasdfghjklzxcvbnm_123456789".to_string() }
+    });
+
+    // active port
+
+    let active = validate_socket(&instance, 7, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "active".to_string(),
+        socket: active.clone(),
+        default: SocketDefault::String(String::new()),
+        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "qwertyuiopasdfghjklzxcvbnm_123456789".to_string() }
+    });
+
+    // default port
+
+    let default = validate_socket(&instance, 8, SocketType::IncomingSwitch)?;
+
+    sockets.push(SocketTui{ 
+        name: "default".to_string(),
+        socket: default.clone(),
+        default: SocketDefault::Bool(false),
+        additional: Additional::Switch { on: "on".to_string(), off: "off".to_string() },
+    });
+
+    // truth port
+
+    let truth = validate_socket(&instance, 9, SocketType::OutgoingNamed)?;
+
+    sockets.push(SocketTui{ 
+        name: "truth".to_string(),
+        socket: truth.clone(),
+        default: SocketDefault::None,
+        additional: Additional::None,
+    });
+    
+    Ok(())
 }
 
 fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), NodeConversionError> {
@@ -166,6 +244,77 @@ fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), No
         socket: default.clone(),
         default: SocketDefault::String("".to_string()),
         additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: String::new() }
+    });
+
+    // data port
+
+    let data = validate_socket(&instance, 10, SocketType::OutgoingNamed)?;
+
+    sockets.push(SocketTui{ 
+        name: "data".to_string(),
+        socket: data.clone(),
+        default: SocketDefault::None,
+        additional: Additional::None,
+    });
+    
+    Ok(())
+}
+
+fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), NodeConversionError> {
+
+    // minimum port
+
+    let minimum = validate_socket(&instance, 6, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "minimum".to_string(),
+        socket: minimum.clone(),
+        default: SocketDefault::String(String::new()),
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.123456789".to_string() }
+    });
+
+    // maximum port
+
+    let maximum = validate_socket(&instance, 7, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "maximum".to_string(),
+        socket: maximum.clone(),
+        default: SocketDefault::String(String::new()),
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.123456789".to_string() }
+    });
+
+    // step port
+
+    let step = validate_socket(&instance, 8, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "step".to_string(),
+        socket: step.clone(),
+        default: SocketDefault::String(String::new()),
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.123456789".to_string() }
+    });
+
+    // default port
+
+    let default = validate_socket(&instance, 9, SocketType::IncomingText)?;
+
+    sockets.push(SocketTui{ 
+        name: "default".to_string(),
+        socket: default.clone(),
+        default: SocketDefault::String("".to_string()),
+        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "-.123456789".to_string() }
+    });
+
+    // data port
+
+    let data = validate_socket(&instance, 10, SocketType::OutgoingNamed)?;
+
+    sockets.push(SocketTui{ 
+        name: "data".to_string(),
+        socket: data.clone(),
+        default: SocketDefault::None,
+        additional: Additional::None,
     });
     
     Ok(())
