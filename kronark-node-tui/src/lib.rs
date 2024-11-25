@@ -19,16 +19,17 @@ mod connections;
 pub struct Camera {
     pub x: i32,
     pub y: i32,
-    pub scale: f32,
+    pub scale_x: f32,
+    pub scale_y: f32,
 }
 
 impl Camera {
     pub fn apply(&self, position: (i32, i32)) -> (i32, i32) {
-        ((position.0 as f32 * self.scale) as i32 - self.x, (-position.1 as f32 * self.scale) as i32 - self.y)
+        ((position.0 as f32 * self.scale_x) as i32 - self.x, (-position.1 as f32 * self.scale_y) as i32 - self.y)
     }
 
-    pub fn with_scale(position: (i32, i32), scale: f32) -> Self {
-        Camera { x: (position.0 as f32 * scale) as i32, y: (-position.1 as f32 * scale) as i32, scale }
+    pub fn with_scale(position: (i32, i32), scale_x: f32, scale_y: f32) -> Self {
+        Camera { x: (position.0 as f32 * scale_x) as i32, y: (-position.1 as f32 * scale_y) as i32, scale_x, scale_y }
     }
 }
 
@@ -72,7 +73,7 @@ impl App {
             external: NodeTui { name: "".to_string(), x: 0, y: 0, sockets: vec![], color: ratatui::style::Color::DarkGray, type_index: 0, key: 0 } 
         };
 
-        let camera = Camera::with_scale(input, 2.0); 
+        let camera = Camera::with_scale(input, 2.5, 1.0); 
 
         Ok(App { camera, node_graph: graph, graph_view: GraphView::Internal, exit: false })
     }
