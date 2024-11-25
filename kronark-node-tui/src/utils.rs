@@ -79,6 +79,15 @@ pub fn write_line(start: i32, end: i32, y: i32, string: String, buf: &mut Buffer
     }
 }
 
+pub fn write_cell(x: i32, y: i32, char: char , buf: &mut Buffer) {
+    if y < 0 || x < 0 {
+        return;
+    }
+    if let Some(mut cell) = buf.cell_mut((x.max(0) as u16, y.max(0) as u16)) {
+        cell.set_char(char);
+    }
+}
+
 pub fn color_rect(start_x: i32, end_x: i32, start_y: i32, end_y: i32, bg: ratatui::style::Color, fg: ratatui::style::Color, buf: &mut Buffer) {
     for y in (start_y.max(0) as u16)..(end_y.max(0) as u16) {
         for x in (start_x.max(0) as u16)..(end_x.max(0) as u16) {

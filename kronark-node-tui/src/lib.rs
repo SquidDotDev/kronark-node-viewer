@@ -13,6 +13,7 @@ mod node_tui;
 mod nodegraph;
 mod built_in;
 mod errors;
+mod connections;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Camera {
@@ -68,7 +69,7 @@ impl App {
         let internal = InternalGraph { nodes, input, output, output_connections };
         let graph = NodeGraph { 
             internal,
-            external: NodeTui { name: "".to_string(), x: 0, y: 0, sockets: vec![], color: ratatui::style::Color::DarkGray, type_index: 0 } 
+            external: NodeTui { name: "".to_string(), x: 0, y: 0, sockets: vec![], color: ratatui::style::Color::DarkGray, type_index: 0, key: 0 } 
         };
 
         let camera = Camera::with_scale(input, 2.0); 

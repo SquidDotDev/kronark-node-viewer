@@ -23,6 +23,7 @@ pub struct NodeTui {
     pub sockets: Vec<SocketTui>,
     pub color: Color,
     pub type_index: u8,
+    pub key: u8,
 }
 
 impl NodeTui {

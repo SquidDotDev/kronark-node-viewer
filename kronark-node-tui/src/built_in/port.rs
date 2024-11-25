@@ -74,7 +74,8 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
             y: instance.position_y as i32,
             color: ratatui::style::Color::DarkGray,
             type_index: instance.node_type as u8,
-            sockets: sockets
+            sockets: sockets,
+            key: instance.key as u8,
         };
         return Ok(node);
     }
@@ -115,7 +116,8 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         y: instance.position_y as i32,
         color: ratatui::style::Color::DarkGray,
         type_index: instance.node_type as u8,
-        sockets: sockets
+        sockets: sockets,
+        key: instance.key as u8,
     };
     Ok(node)
 }
