@@ -1,4 +1,4 @@
-use std::ops::RangeInclusive;
+use std::{collections::HashSet, ops::RangeInclusive};
 
 use kronark_node_parser::kronarknode::socket::{DataType, Socket, SocketType};
 use ratatui::buffer::Buffer;
@@ -12,7 +12,7 @@ pub enum Additional {
     Text { minimum: String, maximum: String, valid: String },
     Number { minimum: String, maximum: String, step: String },
     Switch { on: String, off: String },
-    Select { options: Vec<String> },
+    Select { options: HashSet<String> },
 }
 
 impl Additional {

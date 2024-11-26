@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use kronark_node_parser::kronarknode::instance::Instance;
 use kronark_node_parser::kronarknode::socket::SocketType;
 use crate::socket_tui::{Additional, SocketDefault, SocketTui};
@@ -84,7 +86,12 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
 
     let type_socket = validate_socket(&instance, 4, SocketType::IncomingSelect)?;
 
-    let options = vec!["named".to_string(), "number".to_string(), "select".to_string(), "switch".to_string(), "text".to_string()];
+    let mut options = HashSet::new();
+    options.insert("named".to_string());
+    options.insert("number".to_string());
+    options.insert("select".to_string());
+    options.insert("switch".to_string());
+    options.insert("text".to_string());
 
     sockets.push(SocketTui{ 
         name: "type".to_string(),
