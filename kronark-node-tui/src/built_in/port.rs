@@ -1,5 +1,5 @@
 use kronark_node_parser::kronarknode::instance::Instance;
-use kronark_node_parser::kronarknode::socket::{DataType, SocketType};
+use kronark_node_parser::kronarknode::socket::SocketType;
 use crate::socket_tui::{Additional, SocketDefault, SocketTui};
 use crate::utils::{data_get_constant, validate_socket};
 
@@ -8,7 +8,7 @@ use crate::{errors::NodeConversionError, node_tui::NodeTui};
 pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
     let mut sockets = Vec::new();
 
-    // i/o socket 
+    // i/o port 
 
     let io_switch = validate_socket(&instance, 0, SocketType::IncomingSwitch)?;
 
@@ -19,7 +19,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         additional: Additional::Switch { on: "input".to_string(), off: "output".to_string() },
     });
 
-    // channel socket
+    // channel port
 
     let channel= if io_switch.flags.is_switch_on() {
         validate_socket(&instance, 1, SocketType::IncomingNamed)?
@@ -34,7 +34,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         additional: Additional::None,
     });
 
-    // slot socket 
+    // slot port 
 
     let slot = validate_socket(&instance, 2, SocketType::IncomingNumber)?;
 
@@ -45,7 +45,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         additional: Additional::Number { minimum: "0".to_string(), maximum: "255".to_string(), step: "1".to_string() }
     });
 
-    // name socket 
+    // name port 
 
     let name = validate_socket(&instance, 3, SocketType::IncomingText)?;
 
@@ -53,7 +53,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         name: "name".to_string(),
         socket: name.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: "0".to_string(), maximum: "64".to_string(), valid: "qwertyuiopasdfghjklzxcvbnm_123456789".to_string() }
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "64".to_string(), valid: "qwertyuiopasdfghjklzxcvbnm_1234567890 ".to_string() }
     });
 
     // for output only
@@ -80,7 +80,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         return Ok(node);
     }
 
-    // type socket
+    // type port
 
     let type_socket = validate_socket(&instance, 4, SocketType::IncomingSelect)?;
 
@@ -93,7 +93,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         additional: Additional::Select { options }
     });
 
-    // repetition socket
+    // repetition port
 
     let repetition = validate_socket(&instance, 5, SocketType::IncomingSwitch)?;
 
@@ -161,7 +161,7 @@ fn parse_switch(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
         name: "inactive".to_string(),
         socket: inactive.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "qwertyuiopasdfghjklzxcvbnm_123456789".to_string() }
+        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "qwertyuiopasdfghjklzxcvbnm_1234567890 ".to_string() }
     });
 
     // active port
@@ -172,7 +172,7 @@ fn parse_switch(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
         name: "active".to_string(),
         socket: active.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "qwertyuiopasdfghjklzxcvbnm_123456789".to_string() }
+        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "qwertyuiopasdfghjklzxcvbnm_1234567890 ".to_string() }
     });
 
     // default port
@@ -210,7 +210,7 @@ fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), No
         name: "minimum".to_string(),
         socket: minimum.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: "0".to_string(), maximum: "4".to_string(), valid: "123456789".to_string() }
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "4".to_string(), valid: "1234567890".to_string() }
     });
 
     // maximum port
@@ -221,7 +221,7 @@ fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), No
         name: "maximum".to_string(),
         socket: maximum.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: "0".to_string(), maximum: "4".to_string(), valid: "123456789".to_string() }
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "4".to_string(), valid: "1234567890".to_string() }
     });
 
     // valid port
@@ -270,7 +270,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
         name: "minimum".to_string(),
         socket: minimum.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.123456789".to_string() }
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.1234567890".to_string() }
     });
 
     // maximum port
@@ -281,7 +281,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
         name: "maximum".to_string(),
         socket: maximum.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.123456789".to_string() }
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.1234567890".to_string() }
     });
 
     // step port
@@ -292,7 +292,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
         name: "step".to_string(),
         socket: step.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.123456789".to_string() }
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "-.1234567890".to_string() }
     });
 
     // default port
@@ -303,7 +303,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
         name: "default".to_string(),
         socket: default.clone(),
         default: SocketDefault::String("".to_string()),
-        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "-.123456789".to_string() }
+        additional: Additional::Text { minimum: String::new(), maximum: String::new(), valid: "-.1234567890".to_string() }
     });
 
     // data port

@@ -2,6 +2,7 @@ use kronark_node_parser::kronarknode::instance::Instance;
 use ratatui::buffer::Buffer;
 use ratatui::style::Color;
 
+use crate::built_in::settings::parse_settings;
 use crate::socket_tui::{SocketTuiTransform};
 use crate::utils::{color_line, color_rect, format_text_center, write_line};
 use crate::Camera;
@@ -30,6 +31,7 @@ impl NodeTui {
     pub fn from_instance(instance: Instance) -> Result<Self, NodeConversionError> {
         match instance.node_type {
             255 => parse_port(instance),
+            254 => parse_settings(instance),
             _ => Err(NodeConversionError::UnknownNodeType)
         }
     }
@@ -70,4 +72,17 @@ impl NodeTui {
     pub fn get_y_size(&self) -> usize {
         self.sockets.len() as usize * 2 + 4
     }
+
+    pub fn get_x_size(&self) -> usize {
+        let max_name = (self.name.len() + 2).min(MAX_NAME_SIZE).max(MIN_NAME_SIZE);
+        let max_sockets_name = self.sockets.iter()
+        .fold(MIN_SOCKET_NAME_SIZE, |a, s| {a.max(s.name.len() + 1)} )
+        .min(MAX_SOCKET_NAME_SIZE);
+        let max_sockets_value = self.sockets.iter()
+        .fold(MIN_SOCKET_DATA_SIZE, |a, s| {a.max(s.get_size())} )
+        .min(MAX_SOCKET_DATA_SIZE);
+        let max_sockets_line = max_sockets_name + max_sockets_value;
+        let width = std::cmp::max(max_sockets_line + 2, max_name + 2);
+        width
+    } 
 }

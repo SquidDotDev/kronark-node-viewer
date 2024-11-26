@@ -37,9 +37,9 @@ impl InternalGraph {
     fn get_socket_pos(&self, camera: &Camera, node: u8, socket: u8) -> Option<(i32, i32)> {
         for node_tui in self.nodes.iter().filter(|n| n.key == node) {
             for (i, socket_tui) in node_tui.sockets.iter().enumerate() {
-                if socket_tui.socket.port_slot == socket {
+                if socket_tui.socket.port_slot-1 == socket {
                     let (x_node, y_node) = camera.apply((node_tui.x, node_tui.y));
-                    return Some((x_node, y_node + i as i32 * 2 + 4));
+                    return Some((x_node + node_tui.get_x_size() as i32, y_node + i as i32 * 2 + 4));
                 }
             }
         }
