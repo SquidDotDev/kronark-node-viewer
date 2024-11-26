@@ -2,6 +2,7 @@ use kronark_node_parser::kronarknode::instance::Instance;
 use ratatui::buffer::Buffer;
 use ratatui::style::Color;
 
+use crate::built_in::path::parse_path;
 use crate::built_in::settings::parse_settings;
 use crate::socket_tui::{SocketTuiTransform};
 use crate::utils::{color_line, color_rect, format_text_center, write_line};
@@ -32,6 +33,7 @@ impl NodeTui {
         match instance.node_type {
             255 => parse_port(instance),
             254 => parse_settings(instance),
+            253 => parse_path(instance),
             _ => Err(NodeConversionError::UnknownNodeType)
         }
     }

@@ -12,7 +12,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
 
     // i/o port 
 
-    let io_switch = validate_socket(&instance, 0, SocketType::IncomingSwitch)?;
+    let io_switch = validate_socket(&instance, sockets.len(), SocketType::IncomingSwitch)?;
 
     sockets.push(SocketTui{ 
         name: "".to_string(),
@@ -24,9 +24,9 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
     // channel port
 
     let channel= if io_switch.flags.is_switch_on() {
-        validate_socket(&instance, 1, SocketType::IncomingNamed)?
+        validate_socket(&instance, sockets.len(), SocketType::IncomingNamed)?
     } else {
-        validate_socket(&instance, 1, SocketType::OutgoingNamed)?
+        validate_socket(&instance, sockets.len(), SocketType::OutgoingNamed)?
     };
 
     sockets.push(SocketTui{ 
@@ -38,7 +38,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
 
     // slot port 
 
-    let slot = validate_socket(&instance, 2, SocketType::IncomingNumber)?;
+    let slot = validate_socket(&instance, sockets.len(), SocketType::IncomingNumber)?;
 
     sockets.push(SocketTui{ 
         name: "slot".to_string(),
@@ -49,7 +49,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
 
     // name port 
 
-    let name = validate_socket(&instance, 3, SocketType::IncomingText)?;
+    let name = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "name".to_string(),
@@ -61,7 +61,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
     // for output only
 
     if !io_switch.flags.is_switch_on() {
-        let data = validate_socket(&instance, 4, SocketType::IncomingNamed)?;
+        let data = validate_socket(&instance, sockets.len(), SocketType::IncomingNamed)?;
 
         sockets.push(SocketTui{ 
             name: "data".to_string(),
@@ -84,7 +84,7 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
 
     // type port
 
-    let type_socket = validate_socket(&instance, 4, SocketType::IncomingSelect)?;
+    let type_socket = validate_socket(&instance, sockets.len(), SocketType::IncomingSelect)?;
 
     let mut options = HashSet::new();
     options.insert("named".to_string());
@@ -96,13 +96,13 @@ pub fn parse_port(instance: Instance) -> Result<NodeTui, NodeConversionError> {
     sockets.push(SocketTui{ 
         name: "type".to_string(),
         socket: type_socket.clone(),
-        default: SocketDefault::String("compiler/any".to_string()),
+        default: SocketDefault::String("named".to_string()),
         additional: Additional::Select { options }
     });
 
     // repetition port
 
-    let repetition = validate_socket(&instance, 5, SocketType::IncomingSwitch)?;
+    let repetition = validate_socket(&instance, sockets.len(), SocketType::IncomingSwitch)?;
 
     sockets.push(SocketTui{ 
         name: "".to_string(),
@@ -146,7 +146,7 @@ fn parse_default(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(),
 
     // data port
 
-    let data = validate_socket(&instance, 7, SocketType::OutgoingNamed)?;
+    let data = validate_socket(&instance, sockets.len(), SocketType::OutgoingNamed)?;
 
     sockets.push(SocketTui{ 
         name: "data".to_string(),
@@ -162,7 +162,7 @@ fn parse_switch(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // inactive port
 
-    let inactive = validate_socket(&instance, 6, SocketType::IncomingText)?;
+    let inactive = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "inactive".to_string(),
@@ -173,7 +173,7 @@ fn parse_switch(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // active port
 
-    let active = validate_socket(&instance, 7, SocketType::IncomingText)?;
+    let active = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "active".to_string(),
@@ -184,7 +184,7 @@ fn parse_switch(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // default port
 
-    let default = validate_socket(&instance, 8, SocketType::IncomingSwitch)?;
+    let default = validate_socket(&instance, sockets.len(), SocketType::IncomingSwitch)?;
 
     sockets.push(SocketTui{ 
         name: "default".to_string(),
@@ -195,7 +195,7 @@ fn parse_switch(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // truth port
 
-    let truth = validate_socket(&instance, 9, SocketType::OutgoingNamed)?;
+    let truth = validate_socket(&instance, sockets.len(), SocketType::OutgoingNamed)?;
 
     sockets.push(SocketTui{ 
         name: "truth".to_string(),
@@ -211,7 +211,7 @@ fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), No
 
     // minimum port
 
-    let minimum = validate_socket(&instance, 6, SocketType::IncomingText)?;
+    let minimum = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "minimum".to_string(),
@@ -222,7 +222,7 @@ fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), No
 
     // maximum port
 
-    let maximum = validate_socket(&instance, 7, SocketType::IncomingText)?;
+    let maximum = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "maximum".to_string(),
@@ -233,7 +233,7 @@ fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), No
 
     // valid port
 
-    let valid = validate_socket(&instance, 8, SocketType::IncomingText)?;
+    let valid = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "valid".to_string(),
@@ -244,7 +244,7 @@ fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), No
 
     // default port
 
-    let default = validate_socket(&instance, 9, SocketType::IncomingText)?;
+    let default = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "default".to_string(),
@@ -255,7 +255,7 @@ fn parse_text(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), No
 
     // data port
 
-    let data = validate_socket(&instance, 10, SocketType::OutgoingNamed)?;
+    let data = validate_socket(&instance, sockets.len(), SocketType::OutgoingNamed)?;
 
     sockets.push(SocketTui{ 
         name: "data".to_string(),
@@ -271,7 +271,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // minimum port
 
-    let minimum = validate_socket(&instance, 6, SocketType::IncomingText)?;
+    let minimum = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "minimum".to_string(),
@@ -282,7 +282,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // maximum port
 
-    let maximum = validate_socket(&instance, 7, SocketType::IncomingText)?;
+    let maximum = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "maximum".to_string(),
@@ -293,7 +293,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // step port
 
-    let step = validate_socket(&instance, 8, SocketType::IncomingText)?;
+    let step = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "step".to_string(),
@@ -304,7 +304,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // default port
 
-    let default = validate_socket(&instance, 9, SocketType::IncomingText)?;
+    let default = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "default".to_string(),
@@ -315,7 +315,7 @@ fn parse_number(instance: Instance, sockets: &mut Vec<SocketTui>) -> Result<(), 
 
     // data port
 
-    let data = validate_socket(&instance, 10, SocketType::OutgoingNamed)?;
+    let data = validate_socket(&instance, sockets.len(), SocketType::OutgoingNamed)?;
 
     sockets.push(SocketTui{ 
         name: "data".to_string(),

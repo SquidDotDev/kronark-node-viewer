@@ -9,7 +9,7 @@ pub fn parse_settings(instance: Instance) -> Result<NodeTui, NodeConversionError
 
     // output port
 
-    let output = validate_socket(&instance, 0, SocketType::OutgoingNamed)?;
+    let output = validate_socket(&instance, sockets.len(), SocketType::OutgoingNamed)?;
 
     sockets.push(SocketTui{ 
         name: "output".to_string(),
@@ -20,7 +20,7 @@ pub fn parse_settings(instance: Instance) -> Result<NodeTui, NodeConversionError
 
     // module port
 
-    let module = validate_socket(&instance, 1, SocketType::IncomingText)?;
+    let module = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "module".to_string(),
@@ -31,7 +31,7 @@ pub fn parse_settings(instance: Instance) -> Result<NodeTui, NodeConversionError
 
     // name port 
 
-    let name = validate_socket(&instance, 2, SocketType::IncomingText)?;
+    let name = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "name".to_string(),
@@ -42,7 +42,7 @@ pub fn parse_settings(instance: Instance) -> Result<NodeTui, NodeConversionError
 
     // color port 
 
-    let color = validate_socket(&instance, 3, SocketType::IncomingText)?;
+    let color = validate_socket(&instance, sockets.len(), SocketType::IncomingText)?;
 
     sockets.push(SocketTui{ 
         name: "color".to_string(),
