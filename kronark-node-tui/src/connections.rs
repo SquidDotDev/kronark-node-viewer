@@ -21,7 +21,7 @@ impl InternalGraph {
                     } else {
                         if let Some(socket_pos) = self.get_socket_pos(camera, node.clone(), socket.clone()) {
                             let (x_node, y_node) = camera.apply((node_tui.x, node_tui.y));
-                            let (x_end, y_end) = (x_node, y_node + i as i32 * 2 + 1);
+                            let (x_end, y_end) = (x_node, y_node + i as i32 * 2 + 4);
                             render_connection(socket_pos.0, x_end, socket_pos.1, y_end, buf, camera);
                         }
                     }
