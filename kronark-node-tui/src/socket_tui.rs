@@ -1,6 +1,6 @@
 use std::{collections::HashSet, ops::RangeInclusive};
 
-use kronark_node_parser::kronarknode::socket::{DataType, Socket, SocketType};
+use kronark_node_parser::kronarknode::socket::{DataType, Socket, SocketFlags, SocketType};
 use ratatui::buffer::Buffer;
 use ratatui::style::Color;
 
@@ -35,7 +35,8 @@ pub struct SocketTui {
     pub name: String,
     pub socket: Socket,
     pub default: SocketDefault,
-    pub additional: Additional
+    pub additional: Additional,
+    pub connective: bool,
 }
 
 impl SocketTui {
@@ -51,15 +52,25 @@ impl SocketTui {
 
     pub fn render(&self, transform: SocketTuiTransform, buf: &mut Buffer) {
         if !self.socket.flags.get_type().is_incoming() {
-           color_line(transform.x+1, transform.x+1 + transform.width as i32 - 2, transform.y, Color::Black, Color::White, buf); 
-           write_line(transform.x+1, transform.x+1 + transform.width as i32 - 2, transform.y, format_text_right(&self.name, transform.width - 2), buf); 
-           write_line(transform.x+1 + transform.width as i32 - 2, transform.x+1 + transform.width as i32 - 1, transform.y, "⬤".to_string(), buf); 
-           return;
+            if let SocketDefault::Bool(_) = self.default {
+                self.render_repetitive_end(transform.x+1, transform.y, transform.width - 2, buf);
+                return;
+            }
+            color_line(transform.x+1, transform.x+1 + transform.width as i32 - 2, transform.y, Color::Black, Color::White, buf); 
+            write_line(transform.x+1, transform.x+1 + transform.width as i32 - 2, transform.y, format_text_right(&self.name, transform.width - 2), buf); 
+            write_line(transform.x+1 + transform.width as i32 - 2, transform.x+1 + transform.width as i32 - 1, transform.y, "⬤".to_string(), buf); 
+            return;
         }
 
         color_line(transform.x+1, transform.x+1 + transform.width as i32 - 2, transform.y, Color::Black, Color::White, buf); 
         write_line(transform.x+1, transform.x+1 + transform.width as i32 - 2, transform.y, format_text_left(&self.name, transform.name_width), buf); 
-        write_line(transform.x, transform.x+1, transform.y, "⬤".to_string(), buf); 
+        if self.connective{
+            write_line(transform.x, transform.x+1, transform.y, "⬤".to_string(), buf); 
+        }
+
+        if self.socket.flags.is_connected() {
+            return;
+        }
 
         let (x, width) = if self.name.is_empty() {
             (transform.x + 1, transform.width - 2)
@@ -74,6 +85,16 @@ impl SocketTui {
             SocketType::IncomingSelect => self.render_select(x, transform.y, width, buf),
             SocketType::IncomingSwitch => self.render_switch(x, transform.y, width, buf),
         }
+    }
+
+    fn render_repetitive_end(&self, x: i32, y: i32, width: usize, buf: &mut Buffer) {
+        color_line(x, x + width as i32, y, Color::DarkGray, Color::White, buf);
+        let button_width = (width as i32 - 2) / 3;
+        color_line(x + button_width+1, x + 2*button_width +1 as i32, y, Color::Black, Color::White, buf);
+        color_line(x + 2*button_width +2, x + 3*button_width +2, y, Color::Black, Color::White, buf);
+        write_line(x + (button_width as f32 * 0.5) as i32, x + (button_width as f32 * 0.5) as i32 + 1, y, "↪".to_string(), buf);
+        write_line(x +(button_width as f32 * 1.5) as i32 +1, x + (button_width as f32 * 1.5) as i32 + 2, y, "+".to_string(), buf);
+        write_line(x + (button_width as f32 * 2.5) as i32 +2, x + (button_width as f32 * 2.5) as i32 + 3, y, "-".to_string(), buf);
     }
 
     fn render_text(&self, x: i32, y: i32, width: usize, buf: &mut Buffer) {
@@ -117,4 +138,21 @@ pub struct SocketTuiTransform {
 
 fn get_date_size(data: &Option<DataType>) -> usize {
     data_get_constant(data).unwrap_or(String::new()).len()
+}
+
+
+pub fn RepetiveSocket() -> SocketTui {
+    let socket = Socket {
+        flags: SocketFlags::from_byte(0, 0).unwrap(),
+        type_index: 0,
+        port_slot: 0,
+        data: None,
+    };
+    SocketTui {
+        name: "repetitive end".to_string(),
+        socket: socket,
+        default: SocketDefault::Bool(true),
+        additional: Additional::None,
+        connective: false,
+    }
 }

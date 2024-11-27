@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use kronark_node_parser::kronarknode::instance::Instance;
 use kronark_node_parser::kronarknode::socket::SocketType;
-use crate::socket_tui::{Additional, SocketDefault, SocketTui};
+use crate::socket_tui::{Additional, RepetiveSocket, SocketDefault, SocketTui};
 use crate::utils::{data_get_constant, validate_socket};
 use crate::{errors::NodeConversionError, node_tui::NodeTui};
 
@@ -19,6 +19,7 @@ pub fn parse_path(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         socket: path.clone(),
         default: SocketDefault::None,
         additional: Additional::None,
+        connective: true,
     });
 
     // type port
@@ -33,7 +34,8 @@ pub fn parse_path(instance: Instance) -> Result<NodeTui, NodeConversionError> {
         name: "type".to_string(),
         socket: type_socket.clone(),
         default: SocketDefault::String("absolute".to_string()),
-        additional: Additional::Select { options }
+        additional: Additional::Select { options },
+        connective: false,
     });
 
     while let Ok(name_socket) = validate_socket(&instance, sockets.len(), SocketType::IncomingText) {
@@ -41,10 +43,12 @@ pub fn parse_path(instance: Instance) -> Result<NodeTui, NodeConversionError> {
             name: "name".to_string(),
             socket: name_socket.clone(),
             default: SocketDefault::String(String::new()),
-            additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "qwertyuiopasdfghjklzxcvbnm_1234567890 ".to_string() }
+            additional: Additional::Text { minimum: "0".to_string(), maximum: "".to_string(), valid: "qwertyuiopasdfghjklzxcvbnm_1234567890 ".to_string() },
+            connective: true,
         });
     }
 
+    sockets.push(RepetiveSocket());
 
     let node = NodeTui {
         name: instance.name,

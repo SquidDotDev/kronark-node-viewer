@@ -16,6 +16,7 @@ pub fn parse_settings(instance: Instance) -> Result<NodeTui, NodeConversionError
         socket: output.clone(),
         default: SocketDefault::None,
         additional: Additional::None,
+        connective: true,
     });
 
     // module port
@@ -27,6 +28,7 @@ pub fn parse_settings(instance: Instance) -> Result<NodeTui, NodeConversionError
         socket: module.clone(),
         default: SocketDefault::None,
         additional: Additional::None,
+        connective: true,
     });
 
     // name port 
@@ -37,7 +39,8 @@ pub fn parse_settings(instance: Instance) -> Result<NodeTui, NodeConversionError
         name: "name".to_string(),
         socket: name.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: "0".to_string(), maximum: "64".to_string(), valid: "qwertyuiopasdfghjklzxcvbnm_1234567890 ".to_string() }
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "64".to_string(), valid: "qwertyuiopasdfghjklzxcvbnm_1234567890 ".to_string() },
+        connective: true,
     });
 
     // color port 
@@ -48,7 +51,8 @@ pub fn parse_settings(instance: Instance) -> Result<NodeTui, NodeConversionError
         name: "color".to_string(),
         socket: color.clone(),
         default: SocketDefault::String(String::new()),
-        additional: Additional::Text { minimum: "0".to_string(), maximum: "64".to_string(), valid: "abcdef1234567890".to_string() }
+        additional: Additional::Text { minimum: "0".to_string(), maximum: "6".to_string(), valid: "abcdef1234567890".to_string() },
+        connective: true,
     });
 
     let node = NodeTui {
