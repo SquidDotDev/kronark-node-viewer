@@ -46,9 +46,6 @@ impl InternalGraph {
                     padding += 1;
                     continue;
                 }
-                if socket == 3 {
-                    println!("{}, {}", socket, i);
-                }
                 if (i-padding) as u8 == socket {
                     let (x_node, y_node) = camera.apply((node_tui.x, node_tui.y));
                     return Some((x_node + node_tui.get_x_size() as i32, y_node + (i-padding) as i32 * 2 + 4));
