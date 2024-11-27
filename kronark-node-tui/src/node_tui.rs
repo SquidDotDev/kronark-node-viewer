@@ -2,6 +2,8 @@ use kronark_node_parser::kronarknode::instance::Instance;
 use ratatui::buffer::Buffer;
 use ratatui::style::Color;
 
+use crate::built_in::bytes::parse_bytes;
+use crate::built_in::join::parse_join;
 use crate::built_in::path::parse_path;
 use crate::built_in::settings::parse_settings;
 use crate::socket_tui::{SocketTuiTransform};
@@ -34,7 +36,9 @@ impl NodeTui {
             255 => parse_port(instance),
             254 => parse_settings(instance),
             253 => parse_path(instance),
-            _ => Err(NodeConversionError::UnknownNodeType)
+            252 => parse_join(instance),
+            251 => parse_bytes(instance),
+            _ => Err(NodeConversionError::UnknownNodeType(instance.node_type))
         }
     }
 

@@ -126,6 +126,15 @@ impl SocketTui {
 
         write_line(x, x + width as i32, y, format_text_center(&switch_string, width), buf); 
     }
+
+    pub fn is_repetitive_end(&self) -> bool {
+        if !self.socket.flags.get_type().is_incoming() {
+            if let SocketDefault::Bool(_) = self.default {
+                return true;
+            }
+        }
+        false
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -145,7 +154,7 @@ pub fn RepetiveSocket() -> SocketTui {
     let socket = Socket {
         flags: SocketFlags::from_byte(0, 0).unwrap(),
         type_index: 0,
-        port_slot: 0,
+        port_slot: 1,
         data: None,
     };
     SocketTui {

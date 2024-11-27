@@ -40,10 +40,18 @@ impl InternalGraph {
 
     fn get_socket_pos(&self, camera: &Camera, node: u8, socket: u8) -> Option<(i32, i32)> {
         for node_tui in self.nodes.iter().filter(|n| n.key == node) {
+            let mut padding = 0;
             for (i, socket_tui) in node_tui.sockets.iter().enumerate() {
-                if socket_tui.socket.port_slot-1 == socket {
+                if socket_tui.is_repetitive_end() {
+                    padding += 1;
+                    continue;
+                }
+                if socket == 3 {
+                    println!("{}, {}", socket, i);
+                }
+                if (i-padding) as u8 == socket {
                     let (x_node, y_node) = camera.apply((node_tui.x, node_tui.y));
-                    return Some((x_node + node_tui.get_x_size() as i32, y_node + i as i32 * 2 + 4));
+                    return Some((x_node + node_tui.get_x_size() as i32, y_node + (i-padding) as i32 * 2 + 4));
                 }
             }
         }

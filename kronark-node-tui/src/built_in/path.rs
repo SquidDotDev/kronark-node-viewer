@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use kronark_node_parser::kronarknode::instance::Instance;
 use kronark_node_parser::kronarknode::socket::SocketType;
 use crate::socket_tui::{Additional, RepetiveSocket, SocketDefault, SocketTui};
-use crate::utils::{data_get_constant, validate_socket};
+use crate::utils::validate_socket;
 use crate::{errors::NodeConversionError, node_tui::NodeTui};
 
 
@@ -39,6 +39,9 @@ pub fn parse_path(instance: Instance) -> Result<NodeTui, NodeConversionError> {
     });
 
     while let Ok(name_socket) = validate_socket(&instance, sockets.len(), SocketType::IncomingText) {
+        if !(name_socket.flags.is_repetitive()) {
+            break;
+        }
         sockets.push(SocketTui{ 
             name: "name".to_string(),
             socket: name_socket.clone(),
