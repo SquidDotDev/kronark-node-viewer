@@ -48,7 +48,7 @@ impl InternalGraph {
                 }
                 if (i-padding) as u8 == socket {
                     let (x_node, y_node) = camera.apply((node_tui.x, node_tui.y));
-                    return Some((x_node + node_tui.get_x_size() as i32, y_node + (i-padding) as i32 * 2 + 4));
+                    return Some((x_node + node_tui.get_x_size() as i32, y_node + i as i32 * 2 + 4));
                 }
             }
         }
