@@ -3,3 +3,7 @@ pub mod settings;
 pub mod path;
 pub mod join;
 pub mod bytes;
+pub mod option;
+pub mod r#type;
+pub mod size;
+pub mod math;

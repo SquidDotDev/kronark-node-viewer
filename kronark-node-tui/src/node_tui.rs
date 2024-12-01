@@ -4,8 +4,12 @@ use ratatui::style::Color;
 
 use crate::built_in::bytes::parse_bytes;
 use crate::built_in::join::parse_join;
+use crate::built_in::math::parse_math;
+use crate::built_in::option::parse_option;
 use crate::built_in::path::parse_path;
 use crate::built_in::settings::parse_settings;
+use crate::built_in::size::parse_size;
+use crate::built_in::r#type::parse_type;
 use crate::socket_tui::{SocketTuiTransform};
 use crate::utils::{color_line, color_rect, format_text_center, write_line};
 use crate::Camera;
@@ -38,6 +42,10 @@ impl NodeTui {
             253 => parse_path(instance),
             252 => parse_join(instance),
             251 => parse_bytes(instance),
+            250 => parse_option(instance),
+            247 => parse_type(instance),
+            245 => parse_size(instance),
+            241 => parse_math(instance),
             _ => Err(NodeConversionError::UnknownNodeType(instance.node_type))
         }
     }

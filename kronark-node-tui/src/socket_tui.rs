@@ -43,8 +43,8 @@ impl SocketTui {
     pub fn get_size(&self) -> usize {
         match &self.socket.flags.get_type() {
             SocketType::IncomingNamed | SocketType::OutgoingNamed => 0,
-            SocketType::IncomingNumber | SocketType::IncomingText => get_date_size(&self.socket.data),
-            SocketType::IncomingSelect => get_date_size(&self.socket.data) + 2,
+            SocketType::IncomingNumber | SocketType::IncomingText => get_data_size(&self.socket.data),
+            SocketType::IncomingSelect => get_data_size(&self.socket.data) + 2,
             SocketType::IncomingSwitch => self.additional.get_switch_string(self.socket.flags.is_switch_on()).len() + 2,
             
         }
@@ -145,7 +145,7 @@ pub struct SocketTuiTransform {
     pub x: i32, 
 }
 
-fn get_date_size(data: &Option<DataType>) -> usize {
+fn get_data_size(data: &Option<DataType>) -> usize {
     data_get_constant(data).unwrap_or(String::new()).len()
 }
 
